@@ -117,19 +117,19 @@ HCURSOR CDemoMSDDlg::OnQueryDragIcon()
 void CDemoMSDDlg::OnBnClickedBtnInit()
 {
 	// TODO: Add your control notification handler code here
-	ShowMessage("Init App");
+	ProcessBodyStateChange(STAIR_1, PROCESS_Init_State);
 }
 
 void CDemoMSDDlg::OnBnClickedBtnHome()
 {
 	// TODO: Add your control notification handler code here
-	ShowMessage("Doing Home...");
+	ProcessBodyStateChange(STAIR_1, PROCESS_Home_State);
 }
 
 void CDemoMSDDlg::OnBnClickedBtnMove()
 {
 	// TODO: Add your control notification handler code here
-	ShowMessage("Aixs Moving...");
+	ProcessBodyStateChange(STAIR_1, PROCESS_Move_State);
 }
 
 void CDemoMSDDlg::OnBnClickedBtnExit()
@@ -153,6 +153,77 @@ unsigned int __stdcall MSD_Proc(LPVOID lParam)
 	ShowMessage("MSD Start");
 	while(!bMsdTerminate)
 	{
+		switch(GetProcessBodyState(STAIR_1))
+		{
+			case PROCESS_Stand_By_State:
+				{
+					// do nothing
+				}
+				break;
+
+			case PROCESS_Init_State:
+				{
+					switch (GetProcessBodyState(STAIR_2))
+					{
+						case PROCESS_BODY_INIT_STATE:
+							{
+								ShowMessage("Init Start... ");
+								Sleep(1000);
+								ProcessBodyStateChange(STAIR_2, PROCESS_BODY_INIT_STATE+1);
+							}
+							break;
+						case PROCESS_BODY_INIT_STATE+1:
+							{
+								ShowMessage("Init Finish");
+								ProcessBodyStateChange(STAIR_1, PROCESS_Stand_By_State);
+							}
+							break;
+					}
+				}
+				break;
+
+			case PROCESS_Move_State:
+				{
+					switch (GetProcessBodyState(STAIR_2))
+					{
+						case PROCESS_BODY_INIT_STATE:
+							{
+								ShowMessage("Move Start... ");
+								Sleep(1000);
+								ProcessBodyStateChange(STAIR_2, PROCESS_BODY_INIT_STATE+1);
+							}
+							break;
+						case PROCESS_BODY_INIT_STATE+1:
+							{
+								ShowMessage("Move Finish");
+								ProcessBodyStateChange(STAIR_1, PROCESS_Stand_By_State);
+							}
+							break;
+					}
+				}
+				break;
+
+			case PROCESS_Home_State:
+				{
+					switch (GetProcessBodyState(STAIR_2))
+					{
+						case PROCESS_BODY_INIT_STATE:
+							{
+								ShowMessage("Homing ... ");
+								Sleep(1000);
+								ProcessBodyStateChange(STAIR_2, PROCESS_BODY_INIT_STATE+1);
+							}
+							break;
+						case PROCESS_BODY_INIT_STATE+1:
+							{
+								ShowMessage("Home Finish");
+								ProcessBodyStateChange(STAIR_1, PROCESS_Stand_By_State);
+							}
+							break;
+					}
+				}
+				break;
+		}
 		Sleep(1);
 	}
 	return 1;
