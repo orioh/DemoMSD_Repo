@@ -21,7 +21,7 @@
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="1"
 			UseOfMFC="1"
-			CharacterSet="1"
+			CharacterSet="0"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -43,6 +43,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
+				UseUnicodeResponseFiles="false"
 				Optimization="0"
 				PreprocessorDefinitions="WIN32;_WINDOWS;_DEBUG"
 				MinimalRebuild="true"

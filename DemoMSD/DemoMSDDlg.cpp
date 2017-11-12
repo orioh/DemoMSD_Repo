@@ -12,8 +12,8 @@
 
 // CDemoMSDDlg dialog
 
-
-
+static CWnd* pMainDlg;
+void ShowMessage(char* msg);
 
 CDemoMSDDlg::CDemoMSDDlg(CWnd* pParent /*=NULL*/)
 	: CDialog(CDemoMSDDlg::IDD, pParent)
@@ -49,6 +49,9 @@ BOOL CDemoMSDDlg::OnInitDialog()
 	SetIcon(m_hIcon, FALSE);		// Set small icon
 
 	// TODO: Add extra initialization here
+	{
+		pMainDlg = this;
+	}
 
 	return TRUE;  // return TRUE  unless you set the focus to a control
 }
@@ -95,16 +98,19 @@ HCURSOR CDemoMSDDlg::OnQueryDragIcon()
 void CDemoMSDDlg::OnBnClickedBtnInit()
 {
 	// TODO: Add your control notification handler code here
+	ShowMessage("Init App");
 }
 
 void CDemoMSDDlg::OnBnClickedBtnHome()
 {
 	// TODO: Add your control notification handler code here
+	ShowMessage("Doing Home...");
 }
 
 void CDemoMSDDlg::OnBnClickedBtnMove()
 {
 	// TODO: Add your control notification handler code here
+	ShowMessage("Aixs Moving...");
 }
 
 void CDemoMSDDlg::OnBnClickedBtnExit()
@@ -112,4 +118,9 @@ void CDemoMSDDlg::OnBnClickedBtnExit()
 	// TODO: Add your control notification handler code here
 	PostQuitMessage(0);
 	CDialog::OnClose();
+}
+
+void ShowMessage(char* msg)
+{
+	pMainDlg->SetDlgItemText(IDC_Edit_Msg, msg);
 }
