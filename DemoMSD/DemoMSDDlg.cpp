@@ -5,6 +5,9 @@
 #include "DemoMSD.h"
 #include "DemoMSDDlg.h"
 
+//#include <windows.h>
+#include <process.h> // for _beginthreadex()
+
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -12,8 +15,13 @@
 
 // CDemoMSDDlg dialog
 
-static CWnd* pMainDlg;
-void ShowMessage(char* msg);
+static CWnd*	pMainDlg;
+static HANDLE	hMsd;
+static bool		bMsdTerminate = false;
+
+unsigned int __stdcall MSD_Proc(LPVOID lParam);
+void	 ShowMessage(char* msg);
+
 
 CDemoMSDDlg::CDemoMSDDlg(CWnd* pParent /*=NULL*/)
 	: CDialog(CDemoMSDDlg::IDD, pParent)
@@ -51,6 +59,14 @@ BOOL CDemoMSDDlg::OnInitDialog()
 	// TODO: Add extra initialization here
 	{
 		pMainDlg = this;
+		hMsd = (HANDLE)_beginthreadex(
+					NULL,						// void *security
+					0,							// unsigned stack_size
+					MSD_Proc,					// unsigned ( __stdcall *start_address )( void * )
+					NULL,						// void *arglist
+					0,							// unsigned initflag
+					NULL);						// unsigned *thrdaddr
+		bMsdTerminate = false;
 	}
 
 	return TRUE;  // return TRUE  unless you set the focus to a control
@@ -116,6 +132,9 @@ void CDemoMSDDlg::OnBnClickedBtnMove()
 void CDemoMSDDlg::OnBnClickedBtnExit()
 {
 	// TODO: Add your control notification handler code here
+	bMsdTerminate = true;
+	CloseHandle(hMsd);
+
 	PostQuitMessage(0);
 	CDialog::OnClose();
 }
@@ -123,4 +142,14 @@ void CDemoMSDDlg::OnBnClickedBtnExit()
 void ShowMessage(char* msg)
 {
 	pMainDlg->SetDlgItemText(IDC_Edit_Msg, msg);
+}
+
+
+unsigned int __stdcall MSD_Proc(LPVOID lParam)
+{
+	while(!bMsdTerminate)
+	{
+		Sleep(1);
+	}
+	return 1;
 }
