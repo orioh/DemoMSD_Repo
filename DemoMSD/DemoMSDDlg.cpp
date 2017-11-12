@@ -7,6 +7,7 @@
 
 //#include <windows.h>
 #include <process.h> // for _beginthreadex()
+#include <stdlib.h> // malloc , free
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -67,6 +68,8 @@ BOOL CDemoMSDDlg::OnInitDialog()
 					0,							// unsigned initflag
 					NULL);						// unsigned *thrdaddr
 		bMsdTerminate = false;
+
+		ProcessBodyStateChange(STAIR_1, PROCESS_Stand_By_State);
 	}
 
 	return TRUE;  // return TRUE  unless you set the focus to a control
@@ -147,6 +150,7 @@ void ShowMessage(char* msg)
 
 unsigned int __stdcall MSD_Proc(LPVOID lParam)
 {
+	ShowMessage("MSD Start");
 	while(!bMsdTerminate)
 	{
 		Sleep(1);

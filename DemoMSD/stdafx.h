@@ -41,6 +41,7 @@
 
 #include <afxdisp.h>        // MFC Automation classes
 
+#include "MsdStateCore.h"
 
 
 #ifndef _AFX_NO_OLE_SUPPORT
